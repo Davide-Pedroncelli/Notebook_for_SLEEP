@@ -23,8 +23,11 @@ def blockPrint():
 def enablePrint():
     sys.stdout = sys.__stdout__
 
+# Read sys params
 dataset = sys.argv[1]
 model = sys.argv[2]
+
+# Path, dirs
 base_path = "/content/drive/MyDrive/Experiments/SSN"
 model_dir = f"{base_path}/{dataset}/{model}"
 output_dir = "/content/pred"
@@ -41,16 +44,13 @@ elif dataset == "ISRC":
   fold_idx = 4
   test_files = ['AL_29_030107', 'AL_30_061108', 'AL_31_010909', 'AL_32_032408', 'AL_33_042207', 'AL_34_101908', 'AL_35_032607']
 
-
+# Fold path
 folds = [f"{model_dir}/fold{fold_idx}"]
 
+# Test files path
+test_files = [f"/content/drive/MyDrive/Experiments/data/memmap/{dataset}/{i}"for i in test_files]
 
-
-y_pred = []
-y_true = []
-y_prob = []
-mask_ = []
-TEST = []
+# Useful Vatiables
 ece = []
 acs = []
 acc = []
@@ -67,17 +67,18 @@ all_y_pred = []
 all_hypno_true = []
 all_hypno_pred = []
 
-
+print(f"Architecture: SSN, Model: {model}, Estimated time (~ 70 s per subject)\n")
 
 for i, fold in enumerate(folds):
-    # Load test file
-    test_files = [f"/content/drive/MyDrive/Experiments/data/memmap/{dataset}/{i}"for i in test_files]
-    TEST.extend(test_files)
+
+    # Loading test dataset
     dataset_test = DreemDataset(groups_description, features_description=features_description,
                                 temporal_context=21,
                                 records=test_files)
-    # Load best_net
+    # Disable print (to avoid unnecessary information)
     blockPrint()
+
+    # Loading best_net
     net = ModuloNet.load(fr'{fold}/best_model.gz')
     trainer_parameters = {
         "epochs": 100,
@@ -93,8 +94,11 @@ for i, fold in enumerate(folds):
             }
         }
     }
+
+    # Init trainer
     trainer = Trainer(net=net,
                       **trainer_parameters)
+    # Enable print
     enablePrint()
     
     # Prediction
@@ -104,8 +108,7 @@ for i, fold in enumerate(folds):
                                                                                        return_metrics_per_records=True,
                                                                                        verbose=True)
     for ii, key in enumerate(list(hypnograms.keys())):
-        y_conf = []
-
+        
         # Load data
         y_true = np.array(hypnograms[key]["target"])
         y_pred = np.array(hypnograms[key]["predicted"])
@@ -119,6 +122,7 @@ for i, fold in enumerate(folds):
         y_pred = y_pred[mask]
         hypno_pred = hypno_pred[mask,:]
         hypno_true = hypno_true[mask,:]
+        y_conf = []
         for i in range(len(hypno_pred)):
           y_conf.append(np.max(hypno_pred[i,:]))
         
@@ -129,7 +133,7 @@ for i, fold in enumerate(folds):
         all_hypno_pred.append(hypno_pred)
 
         # Compute ECE
-        ece.append(compute_calibration(np.array(y_true), np.array(y_pred), np.array(y_conf), num_bins=20))
+        ece.append(compute_acs(np.array(y_true), np.array(y_pred), np.array(y_conf), num_bins=20))
 
         # Compute ACS
         acs.append(compute_acs(hypno_pred, hypno_true))
@@ -156,7 +160,8 @@ for i, fold in enumerate(folds):
 
 duration = np.round(time.time() - start_time,1)
 print(f"\nDone! [Time elapsed: {duration} s]")
-# Overall performance:
+
+# Overall performance
 Acc = np.round(np.mean(acc)*100,1)
 MF1 = np.round(np.mean(mf1)*100,1)
 K = np.round(np.mean(k)*100,1)
@@ -175,6 +180,7 @@ conf = np.round(np.mean(conf),3)
 ece_ = round(abs(acc_ - conf),3)
 acs = f"{np.round(np.mean(acs),3)} ± {np.round(np.std(acs),3)}"
 
+# Print Table Overall Performance
 print("\nOverall Performance Tables: \n")
 print(tabulate([[dataset, f"SSN {model}", Acc, MF1, WF1, K, F1_w, F1_n1, F1_n2, F1_n3, F1_r]], headers=['Dataset','Model','Accuracy %', 'MF1 %', 'WF1 %','Cohen-k %', 'W %', 'N1 %', 'N2 %','N3 %','REM %'], tablefmt="pretty"))
 print(tabulate([[dataset, f"SSN {model}", ece_, acc_, conf, acs]], headers=['Dataset','Model','ECE', 'Accuracy', 'Confidence','ACS'],tablefmt="pretty"))
@@ -188,4 +194,4 @@ save_dict = {
 }
 
 np.savez(f"/content/drive/MyDrive/Experiments/plot_data/SSN/output_fold{fold_idx}_{dataset}_{model}.npz", **save_dict)
-print(f"Prediction saved to path /content/drive/MyDrive/Experiments/plot_data/SSN/output_fold{fold_idx}_{dataset}_{model}.npz")
+print(f"\nPrediction saved to path /content/drive/MyDrive/Experiments/plot_data/SSN/output_fold{fold_idx}_{dataset}_{model}.npz")
