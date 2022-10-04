@@ -3,9 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Expected Calibration Error (ECE)
-
 def compute_ece(true_labels, pred_labels, confidences, num_bins):
-    """Collects predictions into bins used to draw a reliability diagram.
+    """
     Arguments:
         true_labels: the true labels for the test examples
         pred_labels: the predicted labels for the test examples
@@ -62,10 +61,11 @@ def compute_ece(true_labels, pred_labels, confidences, num_bins):
             "max_calibration_error": mce}
 
 
-# Averaged Cosine Similarity (ACS)
+
 def cos_sim(p,q):
     return np.dot(p,q)/(np.linalg.norm(p)*np.linalg.norm(q))
-
+    
+# Averaged Cosine Similarity (ACS)
 def compute_acs(hypno_true, hypno_pred):
     cos_ = []
     for i in range(len(hypno_true)):
