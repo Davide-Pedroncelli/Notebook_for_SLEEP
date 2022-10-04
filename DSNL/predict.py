@@ -43,14 +43,6 @@ elif dataset == "ISRC":
   data_dir = "/content/drive/MyDrive/Experiments/data/ISRC"
   fold_idx = 4
 
-coding2stages = {
-    0: "W",
-    1: "N1",
-    2: "N2",
-    3: "N3",
-    4: "R"
-}
-
 # Run DSNL
 def run_epoch(
         sess,
@@ -290,6 +282,7 @@ def predict_on_feature_net(
     ece_ = round(abs(acc_ - conf),3)
     acs = f"{np.round(np.mean(perf_dict['acs']),3)} ± {np.round(np.std(perf_dict['acs']),3)}"
 
+    # Print Table Overall Performance
     print("\nOverall Performance Tables: \n")
     print(tabulate([[dataset, f"DSNL {model}", Acc, MF1, WF1, K, F1_w, F1_n1, F1_n2, F1_n3, F1_r]], headers=['Dataset','Model','Accuracy %', 'MF1 %', 'WF1 %','Cohen-k %', 'W %', 'N1 %', 'N2 %','N3 %','REM %'], tablefmt="pretty"))
     print(tabulate([[dataset, f"DSNL {model}", ece_, acc_, conf, acs]], headers=['Dataset','Model','ECE', 'Accuracy', 'Confidence','ACS'],tablefmt="pretty"))
