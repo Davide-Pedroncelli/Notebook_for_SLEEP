@@ -144,7 +144,7 @@ def run_epoch(
 
         # Compute ECE
         each_y_true = [int(i) for i in each_y_true]
-        perf_dict["ece"].append(compute_calibration(np.array(each_y_true), np.array(each_y_pred), np.array(each_conf_pred), num_bins=20))
+        perf_dict["ece"].append(compute_ece(np.array(each_y_true), np.array(each_y_pred), np.array(each_conf_pred), num_bins=20))
 
         # Compute ACS
         perf_dict["acs"].append(compute_acs(each_hypno_true, each_hypno_pred))
@@ -299,8 +299,8 @@ def predict_on_feature_net(
     print(f"\nPrediction saved to path /content/drive/MyDrive/Experiments/plot_data/DSNL/output_fold{fold_idx}_{dataset}_{model}.npz")
 
 def main(argv=None):
-  
-    print(f"Architecture: DSNL, Model: {model} \n")
+
+    print(f"Architecture: DSNL, Model: {model}, Estimated time (~ 8 s per subject)\n")
 
     predict_on_feature_net(
         data_dir=data_dir,
