@@ -4,7 +4,7 @@ import numpy as np
 
 # Expected Calibration Error (ECE)
 
-def compute_calibration(true_labels, pred_labels, confidences, num_bins):
+def compute_ece(true_labels, pred_labels, confidences, num_bins):
     """Collects predictions into bins used to draw a reliability diagram.
     Arguments:
         true_labels: the true labels for the test examples
