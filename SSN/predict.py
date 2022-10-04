@@ -67,7 +67,7 @@ all_y_pred = []
 all_hypno_true = []
 all_hypno_pred = []
 
-print(f"Architecture: SSN, Model: {model}, Estimated time (~ 70 s per subject)\n")
+print(f"Architecture: SSN, Model: {model}, Estimated time (~ 60 s per subject)\n")
 
 for i, fold in enumerate(folds):
 
@@ -133,7 +133,7 @@ for i, fold in enumerate(folds):
         all_hypno_pred.append(hypno_pred)
 
         # Compute ECE
-        ece.append(compute_acs(np.array(y_true), np.array(y_pred), np.array(y_conf), num_bins=20))
+        ece.append(compute_ece(np.array(y_true), np.array(y_pred), np.array(y_conf), num_bins=20))
 
         # Compute ACS
         acs.append(compute_acs(hypno_pred, hypno_true))
