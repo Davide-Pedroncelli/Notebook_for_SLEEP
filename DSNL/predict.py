@@ -15,8 +15,11 @@ from deepsleepLite.utils import *
 from deepsleepLite.sleep_stages import (NUM_CLASSES,
                                         EPOCH_SEC_LEN,
                                         SAMPLING_RATE)
-from ece_acs import*
 from tabulate import tabulate
+
+import inspect
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))) 
+from ece_acs import *
 
 
 # Ignore os, tf depecration errors
