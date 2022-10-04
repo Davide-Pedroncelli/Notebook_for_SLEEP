@@ -7,11 +7,13 @@ import json
 import sys, os
 from sklearn.metrics import f1_score, cohen_kappa_score, accuracy_score
 import pandas as pd
-from ece_acs import*
 from datetime import datetime
 import time
 from tabulate import tabulate
 import warnings
+import inspect
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))) 
+from ece_acs import *
 
 # Disable UserWarning
 warnings.filterwarnings("ignore", category=UserWarning)
