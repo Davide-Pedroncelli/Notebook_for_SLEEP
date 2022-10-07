@@ -54,7 +54,7 @@ def get_balance_class_sequences_oversample(x, y, y_smoothed, seq_length, flippin
     balance_x = []
     balance_y = []
     balance_y_smoothed = []
-    #indices_list = [[],[],[],[],[]]
+    # indices_list = [[],[],[],[],[]]
     for c in class_labels: # class_labels=[0,1,2,3,4], where 0=W, 1=,.....
 
         idx = np.where(y[:, int((seq_length-1)/2)] == c)[0] 
@@ -70,10 +70,10 @@ def get_balance_class_sequences_oversample(x, y, y_smoothed, seq_length, flippin
                 y_smoothed_augmented = np.concatenate((y_smoothed[idx], y_smoothed[idx]))
 
             indices = np.arange(len(x_augmented))
-            np.random.shuffle(indices)# shuffle 
+            np.random.shuffle(indices) # shuffle 
             augmented_idx = random.choices(indices, k=len(idx))
 
-            #Creating indices_list for smoothing:
+            # Creating indices_list for smoothing:
             # IDX = np.array(augmented_idx)
             # IDX[IDX >= len(idx)] = IDX[IDX >= len(idx)]-len(idx) 
             # indices_list[c] = IDX
@@ -138,7 +138,7 @@ def iterate_minibatches_train(inputs, targets, targets_conditioned, batch_size, 
             excerpt1 = indices[indx1]
             excerpt2 = indices[start_idx:]
             excerpt = np.concatenate((excerpt1, excerpt2), axis=0)
-        else:#se non sono alla fine faccio questo
+        else:
             excerpt = indices[start_idx:start_idx + batch_size]
 
         yield inputs[excerpt], targets[excerpt][:, int((seq_length-1)/2)], targets[excerpt], targets_conditioned[excerpt][:, int((seq_length-1)/2)] 
@@ -183,10 +183,10 @@ def iterate_minibatches_prediction(inputs, targets, targets_cond, batch_size, se
         flatten_y = y.reshape((-1,) + targets.shape[1:])
         flatten_y_cond = y_cond.reshape((-1,) + targets_cond.shape[1:])
 
-        #tmp change
+        # tmp change
         flatten_y_seq = seq_targets[:, i: seq_length + i].reshape((-1,) + targets.shape[1:])
         flatten_y_cond_seq = seq_targets_cond[:, i: seq_length + i].reshape((-1,) + targets_cond.shape[1:])
-        yield flatten_x, flatten_y, flatten_y_cond# flatten_y_seq, flatten_y_cond_seq, batch_len, epochs_shifts
+        yield flatten_x, flatten_y, flatten_y_cond
 
 def get_balance_class_sequences_oversample_V2(x, y, y_smoothed, y_sel, seq_length, flipping, cond_prob):
 
@@ -210,8 +210,8 @@ def get_balance_class_sequences_oversample_V2(x, y, y_smoothed, y_sel, seq_lengt
     balance_x = []
     balance_y = []
     balance_y_smoothed = []
-    #indices_list = [[],[],[],[],[]]
-    for c in class_labels:#class_labels=[0,1,2,3,4], where 0=W, 1=,.....
+    # indices_list = [[],[],[],[],[]]
+    for c in class_labels: # class_labels=[0,1,2,3,4], where 0=W, 1=,.....
 
         idx = np.where(y[:, int((seq_length-1)/2)] == c)[0] 
         n_samples = len(idx) 
@@ -229,7 +229,7 @@ def get_balance_class_sequences_oversample_V2(x, y, y_smoothed, y_sel, seq_lengt
             np.random.shuffle(indices)
             augmented_idx = random.choices(indices, k=len(idx))
 
-            #Creating indices_list for smoothing:
+            # Creating indices_list for smoothing:
             # IDX = np.array(augmented_idx)
             # IDX[IDX >= len(idx)] = IDX[IDX >= len(idx)]-len(idx) 
             # indices_list[c] = IDX
