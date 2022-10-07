@@ -35,14 +35,12 @@ class SleepNetLite(object):
         self.layer_idx = 1
         self.monitor_vars = []
 
-    #Un placeholder è un'inizializzazione di di una variabile nel graph, viene creata in dimensioni prima che essa venga riempita dai veri e propri dati
     def _build_placeholder(self):
-        # Place holder del vettore di Input:
-        # name = nome della variabile che lo riempirà
+     
         name = "x_train" if self.is_train else "x_valid"
         self.input_var = tf.compat.v1.placeholder(
             tf.float32,
-            shape=(self.batch_size, int(self.input_dims*self.seq_length), 1, 1),#voleva un int e non un float
+            shape=(self.batch_size, int(self.input_dims*self.seq_length), 1, 1),
             name= name + "_inputs"
         )
 
@@ -235,7 +233,7 @@ class SleepNetLite(object):
             #name = "l{}_label_smoothing_uniform".format(self.layer_idx)
             #self.target_var_smoothed = label_smoothing_uniform(name=name, target_var=self.target_var, alfa=self.alfa, K=self.n_classes)
 
-            # Empirical Label smoothing
+            # Soft Consensus Label smoothing
             name = "l{}_label_smoothing_soft_consensus".format(self.layer_idx)
             self.target_var_smoothed = label_smoothing_soft_consensus(name=name, target_var=self.target_var, target_var_conditioned=self.target_var_conditioned, alfa=self.alfa)
 
@@ -249,7 +247,7 @@ class SleepNetLite(object):
                 logits=self.logits,
                 name="softmax_cross_entropy_with_logits"
 
-            )  ##CHANGE : self.logits, self.target_var, name="sparse_softmax_cross_entropy_with_logits"
+            )  
 
             loss = tf.reduce_mean(loss, name="cross_entropy")
 
@@ -264,4 +262,3 @@ class SleepNetLite(object):
 
             # Predictions
             self.pred_op = tf.argmax(self.logits, 1)
-
