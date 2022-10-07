@@ -45,7 +45,7 @@ def get_balance_class_sequences_oversample(x, y, y_smoothed, seq_length, flippin
 
     class_labels = np.unique(y[:, int((seq_length-1)/2)])
     n_max_classes = -1
-    #ricerca delle classe con più samples
+
     for c in class_labels:
         n_samples = len(np.where(y[:, int((seq_length-1)/2)] == c)[0])
         if n_max_classes < n_samples:
@@ -55,11 +55,11 @@ def get_balance_class_sequences_oversample(x, y, y_smoothed, seq_length, flippin
     balance_y = []
     balance_y_smoothed = []
     #indices_list = [[],[],[],[],[]]
-    for c in class_labels:#class_labels=[0,1,2,3,4], dove 0=W, 1=,.....
+    for c in class_labels: # class_labels=[0,1,2,3,4], where 0=W, 1=,.....
 
-        idx = np.where(y[:, int((seq_length-1)/2)] == c)[0] # cerco l'indice di tutti valori pari a c(valore corrente della label)
-        n_samples = len(idx) #numero di epoche della classe corrente
-        n_repeats = int(n_max_classes / n_samples) #troncato a int, per questo n_remains non sarà praticamente mai uguale a 0
+        idx = np.where(y[:, int((seq_length-1)/2)] == c)[0] 
+        n_samples = len(idx) 
+        n_repeats = int(n_max_classes / n_samples) 
 
         if flipping:
 
@@ -69,13 +69,13 @@ def get_balance_class_sequences_oversample(x, y, y_smoothed, seq_length, flippin
             if cond_prob is True:
                 y_smoothed_augmented = np.concatenate((y_smoothed[idx], y_smoothed[idx]))
 
-            indices = np.arange(len(x_augmented))# creo un indice da 0 a lunghezza di x_agumented
-            np.random.shuffle(indices)# shuffle del vettore degli indici
-            augmented_idx = random.choices(indices, k=len(idx))# scelta casuale di un numero di indici pari a k
+            indices = np.arange(len(x_augmented))
+            np.random.shuffle(indices)# shuffle 
+            augmented_idx = random.choices(indices, k=len(idx))
 
             #Creating indices_list for smoothing:
             # IDX = np.array(augmented_idx)
-            # IDX[IDX >= len(idx)] = IDX[IDX >= len(idx)]-len(idx) # indice delle epoche scelte
+            # IDX[IDX >= len(idx)] = IDX[IDX >= len(idx)]-len(idx) 
             # indices_list[c] = IDX
 
             tmp_x = np.vstack((x[idx], np.repeat(x_augmented[augmented_idx], n_repeats-1, axis=0)))
@@ -126,22 +126,22 @@ def iterate_minibatches_train(inputs, targets, targets_conditioned, batch_size, 
     """
     Generate a generator that return a batch of inputs and targets.
     """
-    assert len(inputs) == len(targets) #restituisce un  errore se la condizione non è verificata
+    assert len(inputs) == len(targets)
     indices = np.arange(len(inputs))
     if shuffle:
         np.random.shuffle(indices)
 
-    count = range(0, len(inputs), batch_size) #contataore va da 0 a len(inputs) con passo batch_size(=100)
+    count = range(0, len(inputs), batch_size) 
     for start_idx in count:
-        if count[-1] == start_idx: #check se se sono arrivato alla fine
+        if count[-1] == start_idx: 
             indx1 = [random.randint(0,start_idx) for p in range(0, batch_size-(len(inputs)-start_idx))]
             excerpt1 = indices[indx1]
             excerpt2 = indices[start_idx:]
             excerpt = np.concatenate((excerpt1, excerpt2), axis=0)
         else:#se non sono alla fine faccio questo
-            excerpt = indices[start_idx:start_idx + batch_size]# da indice corrente a indice corrente + 100 (seleziono i nuovi 100 campioni)
+            excerpt = indices[start_idx:start_idx + batch_size]
 
-        yield inputs[excerpt], targets[excerpt][:, int((seq_length-1)/2)], targets[excerpt], targets_conditioned[excerpt][:, int((seq_length-1)/2)] #è come return, solo che non salava ciò che ritorna in memoria
+        yield inputs[excerpt], targets[excerpt][:, int((seq_length-1)/2)], targets[excerpt], targets_conditioned[excerpt][:, int((seq_length-1)/2)] 
 
 def iterate_minibatches_valid(inputs, targets, targets_conditioned, batch_size, seq_length, shuffle=False):
     """
@@ -201,7 +201,7 @@ def get_balance_class_sequences_oversample_V2(x, y, y_smoothed, y_sel, seq_lengt
 
     class_labels = np.unique(y[:, int((seq_length-1)/2)])
     n_max_classes = -1
-    #ricerca delle classe con più samples
+   
     for c in class_labels:
         n_samples = len(np.where(y[:, int((seq_length-1)/2)] == c)[0])
         if n_max_classes < n_samples:
@@ -211,11 +211,11 @@ def get_balance_class_sequences_oversample_V2(x, y, y_smoothed, y_sel, seq_lengt
     balance_y = []
     balance_y_smoothed = []
     #indices_list = [[],[],[],[],[]]
-    for c in class_labels:#class_labels=[0,1,2,3,4], dove 0=W, 1=,.....
+    for c in class_labels:#class_labels=[0,1,2,3,4], where 0=W, 1=,.....
 
-        idx = np.where(y[:, int((seq_length-1)/2)] == c)[0] # cerco l'indice di tutti valori pari a c(valore corrente della label)
-        n_samples = len(idx) #numero di epoche della classe corrente
-        n_repeats = int(n_max_classes / n_samples) #troncato a int, per questo n_remains non sarà praticamente mai uguale a 0
+        idx = np.where(y[:, int((seq_length-1)/2)] == c)[0] 
+        n_samples = len(idx) 
+        n_repeats = int(n_max_classes / n_samples) 
 
         if flipping:
 
@@ -225,20 +225,20 @@ def get_balance_class_sequences_oversample_V2(x, y, y_smoothed, y_sel, seq_lengt
             if cond_prob is True:
                 y_smoothed_augmented = np.concatenate((y_smoothed[idx], y_smoothed[idx]))
 
-            indices = np.arange(len(x_augmented))# creo un indice da 0 a lunghezza di x_agumented
-            np.random.shuffle(indices)# shuffle del vettore degli indici
-            augmented_idx = random.choices(indices, k=len(idx))# scelta casuale di un numero di indici pari a k
+            indices = np.arange(len(x_augmented))
+            np.random.shuffle(indices)
+            augmented_idx = random.choices(indices, k=len(idx))
 
             #Creating indices_list for smoothing:
             # IDX = np.array(augmented_idx)
-            # IDX[IDX >= len(idx)] = IDX[IDX >= len(idx)]-len(idx) # indice delle epoche scelte
+            # IDX[IDX >= len(idx)] = IDX[IDX >= len(idx)]-len(idx) 
             # indices_list[c] = IDX
 
             tmp_x = np.vstack((x[idx], np.repeat(x_augmented[augmented_idx], n_repeats-1, axis=0)))
             tmp_y = np.vstack((y[idx], np.repeat(y_augmented[augmented_idx], n_repeats-1, axis=0)))
             if cond_prob is True:
                 tmp_y_smoothed = np.vstack((y_smoothed[idx], np.repeat(y_smoothed_augmented[augmented_idx], n_repeats - 1, axis=0)))
-            n_remains = n_max_classes - len(tmp_x) #controllo se mi sono rimasti campioni da selezionare
+            n_remains = n_max_classes - len(tmp_x) 
             if n_remains > 0:
                 augmented_sub_idx = random.choices(indices, k=n_remains)
                 tmp_x = np.vstack([tmp_x, x_augmented[augmented_sub_idx]])
