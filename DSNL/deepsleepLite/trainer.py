@@ -132,8 +132,8 @@ class SleepNetLiteTrainer(Trainer):
 
             for x_batch, y_batch, y_batch_seq, y_batch_conditioned in iterate_minibatches_train( 
                     np.reshape(data, (-1, self.seq_length * int(self.input_dims), 1, 1)), 
-                    targets, #era targets
-                    targets_smoothed, #TODO aggiunto per la conditioned prob
+                    targets, 
+                    targets_smoothed, 
                     self.batch_size,
                     self.seq_length,
                     shuffle=is_shuffle):
@@ -144,8 +144,8 @@ class SleepNetLiteTrainer(Trainer):
                     network.target_var_conditioned: y_batch_conditioned,
                     network.alfa: smoothing
                 }
-                #FIANLMENTE RUNNO LA RETE:
 
+                # Run network
                 _, loss_value, y_pred = sess.run(
                     [train_op, network.loss_op, network.pred_op],
                     feed_dict=feed_dict)
@@ -227,7 +227,7 @@ class SleepNetLiteTrainer(Trainer):
                                                                            seq_length=self.seq_length, flipping=True)
 
                 for x_batch, y_batch, y_batch_seq in iterate_minibatches_train(
-                        np.reshape(data, (-1, self.seq_length * int(self.input_dims), 1, 1)),  # check this line
+                        np.reshape(data, (-1, self.seq_length * int(self.input_dims), 1, 1)),  
                         targets,
                         self.batch_size,
                         self.seq_length,
@@ -409,7 +409,7 @@ class SleepNetLiteTrainer(Trainer):
                     # Load files:
                     train_files, valid_files, test_files = data_loader.load_files_cv(dodo=True)
 
-                    # Load data input sequences from files - tinyDB #shape data_train(n_epoche, n_canali, len_epoch(3000)), #shape targets_train(n_epoch,n_canali)
+                    # Load data input sequences from files - tinyDB
                     data_train, targets_train, sampling_rate, targets_prob_train = data_loader.load_data_sequences(
                         input_files=train_files, seq_length=self.seq_length, train=True, cond_prob=True)
                     data_valid, targets_valid, sampling_rate, targets_prob_valid = data_loader.load_data_sequences(
