@@ -128,10 +128,10 @@ class SleepNetLiteTrainer(Trainer):
             # Balance sleep stages classes
             if balance_classes == 'oversampling':
                 data, targets, targets_smoothed = get_balance_class_sequences_oversample(x=data, y=targets, y_smoothed=targets_smoothed, seq_length=self.seq_length,
-                                                                       flipping=True, cond_prob=True) # dovrebbe essere True
+                                                                       flipping=True, cond_prob=True) 
 
-            for x_batch, y_batch, y_batch_seq, y_batch_conditioned in iterate_minibatches_train( #seleziona le mini_batch dall'epoca correnete
-                    np.reshape(data, (-1, self.seq_length * int(self.input_dims), 1, 1)),  # check this line
+            for x_batch, y_batch, y_batch_seq, y_batch_conditioned in iterate_minibatches_train( 
+                    np.reshape(data, (-1, self.seq_length * int(self.input_dims), 1, 1)), 
                     targets, #era targets
                     targets_smoothed, #TODO aggiunto per la conditioned prob
                     self.batch_size,
@@ -164,7 +164,7 @@ class SleepNetLiteTrainer(Trainer):
             for x_batch, y_batch, y_batch_seq, y_batch_conditioned in iterate_minibatches_valid(
                     np.reshape(data, (-1, self.seq_length * int(self.input_dims), 1, 1)),
                     targets,
-                    targets_smoothed,  # TODO aggiunto per la conditioned prob
+                    targets_smoothed,  
                     self.batch_size,
                     self.seq_length,
                     shuffle=is_shuffle):
@@ -293,7 +293,7 @@ class SleepNetLiteTrainer(Trainer):
 
     def train(self, n_epochs, resume, freeze, alpha):
 
-        # Limit GPU memory Usage----> parte inutile tanto non la uso
+        # Limit GPU memory Usage
         config = ConfigProto()
         config.gpu_options.allow_growth = True
 
