@@ -16,11 +16,13 @@ from deepsleepLite.sleep_stages import (NUM_CLASSES,
                                         EPOCH_SEC_LEN,
                                         SAMPLING_RATE)
 from tabulate import tabulate
-
 import inspect
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))) 
 from ece_acs import *
+import warnings
 
+# Disable UserWarning
+warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 
 # Ignore os, tf depecration errors
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
