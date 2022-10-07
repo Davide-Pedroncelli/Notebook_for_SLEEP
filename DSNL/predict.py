@@ -45,6 +45,7 @@ elif dataset == "DODH":
 elif dataset == "ISRC":
   data_dir = "/content/drive/MyDrive/Experiments/data/ISRC"
   fold_idx = 4
+  SAMPLING_RATE = 128
 
 # Run DSNL
 def run_epoch(
