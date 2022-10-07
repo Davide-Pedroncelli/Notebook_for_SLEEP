@@ -1,9 +1,17 @@
+import sys
+# Read sys params
+dataset = sys.argv[1]
+
 # Definition of useful variables:
+if dataset == "DODO" or dataset == "DODH":
+  SAMPLING_RATE = 100.0
+elif dataset == "ISRC":
+  SAMPLING_RATE = 128.0
+
 #Labels values:
 NUM_CLASSES = 5
 EPOCH_SEC_LEN = 30  # seconds
 SEQ_OF_EPOCHS = 3  # number of epochs in a sequence / length L
-SAMPLING_RATE = 100.0  # ISRC 128 Hz, DODO and DODH 100 Hz
 
 class_dict = {
     0: "W",
