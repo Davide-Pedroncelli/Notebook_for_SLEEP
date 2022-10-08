@@ -47,7 +47,7 @@ n1 = f"N1 = {round(len(np.where(y_true == 1)[0])/len(y_true)*100,2)}%"
 n2 = f"N2 = {round(len(np.where(y_true == 2)[0])/len(y_true)*100,2)}%"
 n3 = f"N3 = {round(len(np.where(y_true == 3)[0])/len(y_true)*100,2)}%"
 rem = f"REM = {round(len(np.where(y_true == 4)[0])/len(y_true)*100,2)}%"
-print(f"% examples per class: {w}, {n1}, {n2}, {n3}, {rem}")
+print(f"% examples: {w}, {n1}, {n2}, {n3}, {rem}")
 
 # Print info
 print(f"Architecture: {arch} {model}")
