@@ -41,6 +41,15 @@ print(f"Accurcay : {acc}")
 acs_ = np.round(compute_acs(hypno_true,hypno_pred),3)
 print(f"ACS : {acs_}")
 
+# Computing % per class
+w = f"%W = {round(len(np.where(y_true == 0)[0])/len(y_true)*100,2)}"
+n1 = f"%N1 = {round(len(np.where(y_true == 1)[0])/len(y_true)*100,2)}"
+n2 = f"%N2 = {round(len(np.where(y_true == 2)[0])/len(y_true)*100,2)}"
+n3 = f"%N3 = {round(len(np.where(y_true == 3)[0])/len(y_true)*100,2)}"
+rem = f"%REM = {round(len(np.where(y_true == 4)[0])/len(y_true)*100,2)}"
+print(f"{w}, {n1}, {n2}, {n3}, {rem}")
+
+# Print info
 print(f"Architecture: {arch} {model}")
 print(f"Dataset: {dataset}, Subject: {allfiles[idx_paz][:-5]}")
 
